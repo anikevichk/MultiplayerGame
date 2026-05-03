@@ -77,3 +77,7 @@ DerivedDataCache/*
 
 
 Content/ParagonSerath/
+Content/NewMap1.umap
+Content/NewMap1_HLOD0_Instancing.uasset
+Content/__ExternalActors__/NewMap1/
+Content/__ExternalObjects__/NewMap1/
