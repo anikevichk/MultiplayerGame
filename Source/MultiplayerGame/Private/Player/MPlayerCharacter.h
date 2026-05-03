@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Character/MCharacter.h"
+#include "InputActionValue.h"
 #include "MPlayerCharacter.generated.h"
-
 /**
  * 
  */
@@ -27,7 +27,20 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* JumpInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* LookInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* MoveInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* InputMappingContext;
+
+	void HandleLookInput(const FInputActionValue& Input);
+	void HandleMoveInput(const FInputActionValue& Input);
+
+	FVector GetLookRightDirection();
+	FVector GetLookForwardDirection();
+	FVector GetMoveForwardDirection();
 };
