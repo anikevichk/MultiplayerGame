@@ -2,19 +2,26 @@
 
 
 #include "Widgets/LobbyWidget.h"
+
+#include "Components/Button.h"
 #include "Components/UniformGridSlot.h"
 #include "Components/UniformGridPanel.h"
 #include "Widgets/TeamSelectionWidget.h"
 #include "Network/MNetStatics.h"
 #include "Player/LobbyPlayerController.h"
 #include "Framework/MGameState.h"
+#include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
 
 void ULobbyWidget::NativeConstruct() {
 	Super::NativeConstruct();
 	
 	ClearAndLoadTeamSelectionSlots();
-	LobbyPlayerController = GetOwningPlayer<ALobbyPlayerController>();
 	ConfigGameState();
+	LobbyPlayerController = GetOwningPlayer<ALobbyPlayerController>();	
+	if (LobbyPlayerController) LobbyPlayerController->OnSwitchToGame.BindUObject(this, &ULobbyWidget::SwitchToGame);
+	StartButton->SetIsEnabled(false);
+	StartButton->OnClicked.AddDynamic(this, &ULobbyWidget::StartButtonClicked);
 }
 
 void ULobbyWidget::ClearAndLoadTeamSelectionSlots() {
@@ -68,4 +75,14 @@ void ULobbyWidget::UpdatePlayerSelectionDisplay(const TArray<FPlayerSelection>& 
 		if (!PlayerSelection.IsValid()) continue;
 		TeamSelectionSlots[PlayerSelection.GetSlot()]->UpdateSlotInfo(PlayerSelection.GetPlayerNickname());
 	}
+
+	if (GameState) StartButton->SetIsEnabled(GameState->CanStart());
+}
+
+void ULobbyWidget::StartButtonClicked() {
+	if (LobbyPlayerController) LobbyPlayerController->Server_Start();
+}
+
+void ULobbyWidget::SwitchToGame() {
+	MainSwitcher->SetActiveWidget(GameRoot);
 }

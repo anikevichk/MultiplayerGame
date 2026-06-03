@@ -38,6 +38,12 @@ const TArray<FPlayerSelection>& AMGameState::GetPlayerSelectionChange() const {
 	return PlayerSelectionArray;
 }
 
+bool AMGameState::CanStart() const {
+	// return PlayerSelectionArray.Num() == PlayerArray.Num();
+	// it will be deleted in the future 
+	return PlayerSelectionArray.Num() == 2;
+}
+
 void AMGameState::OnRep_PlayerSelectionArray(){
 	OnPlayerSelectionUpdated.Broadcast(PlayerSelectionArray);
 }

@@ -4,6 +4,7 @@
 #include "Player/LobbyPlayerController.h"
 #include "Framework/MGameState.h"
 #include "GameFramework/PlayerState.h"
+#include "Framework/MGameState.h"
 
 void ALobbyPlayerController::Server_RequestSlotSelectionChange_Implementation(uint8 SlotID) {
 	if (!GetWorld()) return;
@@ -16,4 +17,25 @@ void ALobbyPlayerController::Server_RequestSlotSelectionChange_Implementation(ui
 
 bool ALobbyPlayerController::Server_RequestSlotSelectionChange_Validate(uint8 SlotID) {
 	return true;
+}
+
+void ALobbyPlayerController::Server_Start_Implementation() {
+	if (!HasAuthority() || !GetWorld()) return;
+
+	// for (FConstPlayerControllerIterator PCI = GetWorld()->GetPlayerControllerIterator(); PCI; ++PCI) {
+	// 	ALobbyPlayerController* PlayerController = Cast<ALobbyPlayerController>(*PCI);
+	// 	if (!PlayerController) return;
+	// 	PlayerController->Client_Start();
+	// }
+	AMGameState* GameState = GetWorld()->GetGameState<AMGameState>();
+	if (!GameState || !GameState->CanStart()) return;
+
+	GetWorld()->ServerTravel(TEXT("/Game/Maps/NewMap?listen"));
+}
+bool ALobbyPlayerController::Server_Start_Validate() {
+	return true;
+}
+
+void ALobbyPlayerController::Client_Start_Implementation() {
+	OnSwitchToGame.ExecuteIfBound();
 }

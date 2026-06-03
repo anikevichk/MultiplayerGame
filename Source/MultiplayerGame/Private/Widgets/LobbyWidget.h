@@ -25,7 +25,10 @@ private:
 	class UWidget* TeamSelectionRoot;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* StartHeroSelectionButton;
+	class UWidget* GameRoot;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* StartButton;
 
 	UPROPERTY(meta = (BindWidget))
 	class UUniformGridPanel* TeamSelectionPanel;
@@ -49,5 +52,10 @@ private:
 	class AMGameState* GameState;
 
 	void UpdatePlayerSelectionDisplay(const TArray<FPlayerSelection>& PlayerSelections);
+	
+	UFUNCTION()
+	void StartButtonClicked();
+
+	void SwitchToGame();
 };
 

@@ -6,6 +6,7 @@
 #include "Player/MenuPlayerController.h"
 #include "LobbyPlayerController.generated.h"
 
+DECLARE_DELEGATE(FOnSwitchToGame);
 /**
  * 
  */
@@ -15,6 +16,14 @@ class ALobbyPlayerController : public AMenuPlayerController
 	GENERATED_BODY()
 
 public:
+	FOnSwitchToGame OnSwitchToGame;
+	
 	UFUNCTION(Server, Reliable, WithValidation)
 	void Server_RequestSlotSelectionChange(uint8 SlotID);
+
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Start();
+
+	UFUNCTION(Client, Reliable)
+	void Client_Start();
 };
